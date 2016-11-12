@@ -3,6 +3,17 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import requests
 
+from bs4 import BeautifulSoup
+from nltk import word_tokenize, tokenize
+from nltk.corpus import stopwords
+
+
+from nltk.sentiment import SentimentAnalyzer
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from nltk.corpus import names
+from nltk.sentiment.util import *
+
+
 
 api_key = 'ea79de4994b64abdaf8520b0a878495a'
 
@@ -42,11 +53,37 @@ def get_news(y, m, d):
     for doc in response:
         if doc['lead_paragraph'] is not None:
             headlines.append(doc['lead_paragraph'])
-    return headlines
+
+    #removes stop words from headline
+    stop_words = list(stopwords.words('english'))
+    new_headlines = []
+    for headline in headlines:
+         tokens = word_tokenize(headline)
+         tokens_without_stop_words = [t for t in tokens if t not in stop_words]
+         new_headline = ""
+         for word in tokens_without_stop_words:
+            new_headline += word + " "
+         new_headlines += [new_headline] 
+
+    #runs sentiment analysis on the headlines and prints it out
+    sid = SentimentIntensityAnalyzer()
+    for i in range(len(new_headlines)):
+        sentences = tokenize.sent_tokenize(new_headlines[i])
+        for sentence in sentences:
+            print(sentence)
+            ss = sid.polarity_scores(sentence)
+            for k in sorted(ss):
+                print '{0}: {1}, '.format(k, ss[k]),
+            print("\n")
+
+    return new_headlines
+
+    # return tokens
 
 
 headlines = get_news('2015', '06', '07')
-for headline in headlines:
-    print headline
-stocks_jan0116 = hist_stock('AAPL', datetime(2016, 1, 1), datetime(2016, 9, 7))
-plot_stock(stocks_jan0116)
+# print(headlines)
+# for headline in headlines:
+#     print headline
+# stocks_jan0116 = hist_stock('AAPL', datetime(2016, 1, 1), datetime(2016, 9, 7))
+# plot_stock(stocks_jan0116)
