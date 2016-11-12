@@ -2,9 +2,42 @@ import matplotlib.finance as fin
 from datetime import datetime
 import matplotlib.pyplot as plt
 import requests
+import urllib
+from bs4 import BeautifulSoup as bsoup
 
 
 api_key = 'ea79de4994b64abdaf8520b0a878495a'
+
+
+def get_industries():
+    industries = {}
+    r = urllib.urlopen('https://biz.yahoo.com/p/sum_conameu.html').read()
+    soup = bsoup(r, "html.parser")
+    for td in soup.find_all("td", bgcolor='ffffee'):
+        industries[td.find("a").find("font").text] = td.find("a")['href']
+    return industries
+
+
+def get_index(ext):
+    r = urllib.urlopen('https://biz.yahoo.com/p/'+ext).read()
+    soup = bsoup(r, "html.parser")
+    soup = soup.find_all('tr')[10:]  # 0 through 9 are headers
+    indices = {}
+    for tr in soup:
+        tds = tr.find_all('td')
+        symbol = tds[0].find_all('a')[1].text if len(tds[0].find_all('a')) > 1 else '[No symbol available]'
+        valuetxt = tds[2].find('font').text
+        if not valuetxt[0].isdigit():
+            value = 0
+        elif valuetxt[-1] == 'B':
+            value = float(valuetxt[:-1])*1000
+        else:
+            value = float(valuetxt[:-1])
+        indices[symbol] = value
+    indices = sorted(indices.items(), key=lambda (k, v): (v, k), reverse=True)
+    weight_total = sum([pair[1] for pair in indices[:5]])
+    indices = [(index[0], index[1]/weight_total) for index in indices]
+    return indices[:5]
 
 
 def hist_stock(symbol, start_date, end_date):
@@ -23,7 +56,7 @@ def plot_stock(hist_data):
 
 
 def get_news(y, m, d):
-    #NYT API
+    # NYT API
     url = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?'
     params = {
         'api-key': api_key,
@@ -45,8 +78,10 @@ def get_news(y, m, d):
     return headlines
 
 
-headlines = get_news('2015', '06', '07')
-for headline in headlines:
-    print headline
-stocks_jan0116 = hist_stock('AAPL', datetime(2016, 1, 1), datetime(2016, 9, 7))
-plot_stock(stocks_jan0116)
+#headlines = get_news('2015', '06', '07')
+#for headline in headlines:
+#    print headline
+#stocks_jan0116 = hist_stock('ATVI.MX', datetime(2016, 1, 1), datetime(2016, 9, 7))
+#plot_stock(stocks_jan0116)
+inds = get_industries()  # returns industries and url extensions
+print get_index(inds[inds.keys()[1]])
