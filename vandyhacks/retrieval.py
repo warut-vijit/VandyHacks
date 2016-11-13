@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 import matplotlib.finance as fin
 from datetime import datetime
 import matplotlib.pyplot as plt
@@ -16,7 +18,8 @@ import urllib
 from bs4 import BeautifulSoup as bsoup
 
 import time
-import datetime as dt 
+import datetime as dt
+
 
 class Retrieval(object):
 
@@ -153,5 +156,3 @@ class Retrieval(object):
 	        time.sleep(0.5)
 	    return zip(days, sentiments)
 
-
-   

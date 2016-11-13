@@ -9,14 +9,14 @@
 <body>
 	<div id="page" height="30%" width="100%" class="pageclass">
         <div class="title">
-            <a>Bear-A-Bull Stocks</a>
+            <a>MINT 2385</a>
         </div>
         <div class="topnav">
             <ul>
                 <li class="first"><div class="dropdown"><a class="dropmenu" href="#">SECTOR</a>
                     <div class="dropdown-content">
 						{% for sector in sectorList %}
-                        <a onclick="setSector({{ sector.key1}})" href="">{{sector.key1}}</a>
+                        <a onclick="" href="">{{sector}}</a>
 						{% endfor %}
                 </li>
                 <li><div class="dropdown"><a class="dropmenu" href="#">CURRENCY</a>
@@ -55,11 +55,9 @@
             </ul>
         </div>
 	</div>
-    <canvas class="display" id="canvas" height="500px" width="1000px">
+    <canvas class="display">
         Sorry, but your browser does not support Canvas. Please try with Google Chrome.
     </canvas>
-    <script>
-        canvas_init();
-    </script>
+	
 </body>
 </html>

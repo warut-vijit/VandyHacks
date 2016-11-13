@@ -1,24 +1,23 @@
 from django.shortcuts import render_to_response, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import auth
-# from django.core.context_processors import csrf
 from django.contrib.auth.forms import UserCreationForm
-# from reportlab.pdfgen import canvas
 import datetime as dt 
+
 from retrieval import *
 retr = Retrieval()
 
 month_to_number = {"january":1, "february":2, "march":3, "april":4, "may":5 , "june":6, "july":7, "august":8, "september":9, "october":10, "november":11, "december":12}
 
+def default_view(request):
+    #index(request, stockID, one month back, today);
+    return None
 
+def index(request, stock_id, start_date, end_date):
+    stock_data = retrieval.hist_stock(stock_id, start_date, end_date)
+    context = {'sectorList': retrieval.get_industries(), 'stock_data': stock_data}
+    return render(request, 'base.html', context)
 
-def graph_view(request, stock_id):
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    context = {'latest_question_list': latest_question_list}
-    return render(request, 'polls/index.html', context)
-
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
 
 def search(self, s):
 	sentiment_input = s.split(' ')
@@ -34,6 +33,4 @@ def search(self, s):
 		plot = retr.hist_to_date(startdate,enddate,sentiment_input[1])
 	
 	return HttpResponse(plot)
-
-
 
