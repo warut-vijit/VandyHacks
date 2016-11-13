@@ -12,8 +12,42 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk.corpus import names
 from nltk.sentiment.util import *
 
+import urllib
+from bs4 import BeautifulSoup as bsoup
+
 import time
 import datetime as dt 
+
+
+def get_industries():
+    industries = {}
+    r = urllib.urlopen('https://biz.yahoo.com/p/sum_conameu.html').read()
+    soup = bsoup(r, "html.parser")
+    for td in soup.find_all("td", bgcolor='ffffee'):
+        industries[td.find("a").find("font").text] = td.find("a")['href']
+    return industries
+
+
+def get_index(ext):
+    r = urllib.urlopen('https://biz.yahoo.com/p/'+ext).read()
+    soup = bsoup(r, "html.parser")
+    soup = soup.find_all('tr')[10:]  # 0 through 9 are headers
+    indices = {}
+    for tr in soup:
+        tds = tr.find_all('td')
+        symbol = tds[0].find_all('a')[1].text if len(tds[0].find_all('a')) > 1 else '[No symbol available]'
+        valuetxt = tds[2].find('font').text
+        if not valuetxt[0].isdigit():
+            value = 0
+        elif valuetxt[-1] == 'B':
+            value = float(valuetxt[:-1])*1000
+        else:
+            value = float(valuetxt[:-1])
+        indices[symbol] = value
+    indices = sorted(indices.items(), key=lambda (k, v): (v, k), reverse=True)
+    weight_total = sum([pair[1] for pair in indices[:5]])
+    indices = [(index[0], index[1]/weight_total) for index in indices]
+    return indices[:5]
 
 
 
@@ -22,7 +56,6 @@ api_key = '7f8c3783c4e3426995efbd57fd026831'
 
 def hist_stock(symbol, start_date, end_date):
     #  returns array of tuples (date, year, month, day, d, open, close, high, low, volume, adjusted_close)
-    
     stock = [(x[0], x[6]) for x in fin.quotes_historical_yahoo_ochl(symbol, start_date, end_date, asobject=True)]
     return stock
 
@@ -97,8 +130,6 @@ def sentiment_analysis(headlines):
         return total_compoud_value_for_day/len(headlines_without_stop_words)
     else:
         return 0
-    # print(total_compoud_value_for_day)
-    # return total_compoud_value_for_day/len(headlines_without_stop_words)
 
 
 def hist_to_date(start_date, end_date, query):
@@ -122,12 +153,15 @@ def hist_to_date(start_date, end_date, query):
     return zip(days, sentiments)
    
 
+inds = get_industries()  # returns industries and url extensions
+print(inds.keys())
+print get_index(inds[inds.keys()[1]])
 
 
-headlines = get_news('2016', '11', '11', 'Apple Inc')
-sentiment_analysis(headlines)
-information = hist_to_date(datetime(2016, 1, 1), datetime(2016, 1, 20), 'Apple Inc')
-plot_stock(information)
+# headlines = get_news('2016', '11', '11', 'Apple Inc')
+# sentiment_analysis(headlines)
+# information = hist_to_date(datetime(2016, 1, 1), datetime(2016, 1, 20), 'Apple Inc')
+# plot_stock(information)
 
 # print(headlines)
 # for headline in headlines:
