@@ -30,16 +30,16 @@ class Retrieval(object):
 
 
 	def get_industries(self):
-	    industries = {}
+	    industries = []
 	    r = urllib.urlopen('https://biz.yahoo.com/p/sum_conameu.html').read()
 	    soup = bsoup(r, "html.parser")
 	    for td in soup.find_all("td", bgcolor='ffffee'):
-	        industries[td.find("a").find("font").text] = td.find("a")['href']
+	        industries.push({'name': td.find("a").find("font").text, 'url': td.find("a")['href'].split('/p/', 1)[1]})
 	    return industries
 
 
-	def get_index(self,ext):
-	    r = urllib.urlopen('https://biz.yahoo.com/p/'+ext).read()
+	def get_index(self,clip):
+	    r = urllib.urlopen('https://biz.yahoo.com/p/'+url).read()
 	    soup = bsoup(r, "html.parser")
 	    soup = soup.find_all('tr')[10:]  # 0 through 9 are headers
 	    indices = {}

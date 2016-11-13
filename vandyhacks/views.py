@@ -28,6 +28,9 @@ def index(request, stock_id, start_date, end_date, sentiment = None):
         context = {'sectorList': retr.get_industries(), 'graph_data' : {'stock_data': stock_data, 'sentiment_data': sentiments}}
     return render(request, 'base.html', context)
 
+def industry(request, u):
+    industry_data =  retr.get_index(u)
+    context = {'sectorList': retr.get_industries(), 'graph_data' : {'stock_data': stock_data, 'sentiment_data': sentiments}}
 
 def search(self, request, s):
 	sentiment_input = s.split(' ')
