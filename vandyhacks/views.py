@@ -2,7 +2,9 @@ from django.shortcuts import render_to_response, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import auth
 from django.contrib.auth.forms import UserCreationForm
+import json
 import datetime as dt 
+
 
 from retrieval import *
 retr = Retrieval()
@@ -45,7 +47,7 @@ def search(request, s):
 		enddate = datetime(int(sentiment_input[7]),int( month_to_number[sentiment_input[5]]),int(sentiment_input[6]))
 		sentiment_data = retr.hist_to_date(startdate,enddate,sentiment_input[1])
 		data = retr.hist_stock(sentiment_input[1], startdate, enddate )
-		context = {'sectorList': [], 'graph_data' : {'stock_data': data, 'sentiment_data': sentiment_data}}
+		context = {'sectorList': [], 'string': "hey",  'graph_data' : {'stock_data': data, 'sentiment_data': sentiment_data}}
 		# return render_to_response("base.html", context)
 		return render( request, 'base.html', context)
 
@@ -60,7 +62,8 @@ def search(request, s):
 		context = {'sectorList':[], 'graph_data' : {'stock_data': data}}
 		# return render_to_response("search.html", context)
 		# print("\nHERE\n")
-		return render( request, 'search.html', context)
+		
+		return render( request, 'base.html', context)
 
 	return HttpResponse( "We fucked up")
 

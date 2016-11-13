@@ -153,7 +153,7 @@ class Retrieval(object):
 	        headlines = self.get_news( d.year, d.month, d.day, query)
 	        if (headlines != None):
 	            sentiment = self.sentiment_analysis(headlines)
-	            days += [d]
+	            days += [str(d.Date())]
 	            sentiments += [sentiment]
 	        d += delta
 	        time.sleep(1)

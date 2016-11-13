@@ -10,14 +10,10 @@ function import_stock(data) {
     //where data is a json array of two-element [date, value] pairs
     //
     active = true;
-    time_series_stock=[];
-    for(var i=0;i<data.length;i++){
-        time_series_stock.push(["",data[i]]);
-    }
-    /*time_series_stock = data.substring(2,data.length-2).split("],[");
+    time_series_stock = data.substring(2,data.length-2).split("],[");
     for(var i=0;i<time_series_stock.length;i++){
         time_series_stock[i] = time_series_stock[i].split(",");
-    }*/
+    }
     delta_x = canvas.width/time_series_stock.length;
     height = canvas.height;
     date_start = Date.parse(time_series_stock[0])
