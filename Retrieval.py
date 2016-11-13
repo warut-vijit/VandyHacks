@@ -154,10 +154,31 @@ def hist_to_date(start_date, end_date, query):
     return zip(days, sentiments)
    
 
-inds = get_industries()  # returns industries and url extensions
-print(inds.keys())
-print get_index(inds[inds.keys()[1]])
+def exportIndustryAverage(name, start_date, end_date):
+    if name not in inds.keys():
+        return None
+    index_comps = get_index(inds[name])  # Where inds[name] is the extension corresponding to industry
+    data = [hist_stock(x[0], start_date, end_date) for x in index_comps]  # outside is corporation, inside is day
+    index_return = []
+    d = start_date
+    delta = dt.timedelta(days=1)
+    while d <= end_date:
+        daily_sum = 0
+        count = 0
+        for index in range(0, len(data)):  # Corporate index
+            if len(data[index][0]) > 0 and data[index][0][0] == d.date():
+                daily_sum += data[index][0][1]
+                count += 1
+                data[index].pop(0)
+        index_return.append([str(d.date()), daily_sum/count if count != 0 else 0])
+        d += delta
+    return index_return
 
+
+inds = get_industries()  # returns industries and url extensions
+# print(inds.keys())
+# print get_index(inds[inds.keys()[1]])
+print exportIndustryAverage(inds.keys()[10], datetime(2016, 1, 1), datetime(2016, 1, 20))
 
 # headlines = get_news('2016', '11', '11', 'Apple Inc')
 # sentiment_analysis(headlines)
