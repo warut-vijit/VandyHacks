@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% load chartit %}
+{{ weatherchart|load_charts:"container" }}
+
+<div id='container'></div>
+
+{% end block %}
