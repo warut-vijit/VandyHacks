@@ -16,6 +16,8 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from . import retrieval
+
 from . import views
 
 urlpatterns = [
@@ -24,3 +26,7 @@ urlpatterns = [
     url(r'^search/(?P<s>.*)/$', views.search, name='search'),
     # url(r'^search/(?P<s>.*)/$', views.search, name='search'),
 ]
+
+
+#retrieval = Retrieval()
+#retrieval.getIndustries()

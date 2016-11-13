@@ -15,11 +15,9 @@
             <ul>
                 <li class="first"><div class="dropdown"><a class="dropmenu" href="#">SECTOR</a>
                     <div class="dropdown-content">
-                        <a onclick="setSector(this)" href="">Link 1</a>
-                        <a onclick="setSector(this)" href="">Link 2</a>
-                        <a onclick="setSector(this)" href="">Link 3</a>
-                        <a onclick="setSector(this)" href="">Link 4</a>
-                    </div></div>
+						{% for sector in sectorList %}
+                        <a onclick="setSector({{ sector.key1}})" href="">{{sector.key1}}</a>
+						{% endfor %}
                 </li>
                 <li><div class="dropdown"><a class="dropmenu" href="#">CURRENCY</a>
                     <div class="dropdown-content">
@@ -31,6 +29,7 @@
                 </li>
                 <li><div class="dropdown"><a class="dropmenu" href="#">PREDICT</a>
                     <div class="dropdown-content">
+						
                         <a onclick="setPredict(this)" href="#">Link 1</a>
                         <a onclick="setPredict(this)" href="#">Link 2</a>
                         <a onclick="setPredict(this)" href="#">Link 3</a>
