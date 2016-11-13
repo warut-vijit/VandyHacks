@@ -136,11 +136,12 @@ def hist_to_date(start_date, end_date, query):
     days = []
     sentiments = []
 
+
     d = start_date
     delta = dt.timedelta(days=1)
     while d <= end_date:
         print("new day")
-        headlines = get_news(d.year, d.month, d.day, query)
+        headlines = self.get_news(d.year, d.month, d.day, query)
         if (headlines != None):
             sentiment = sentiment_analysis(headlines)
             # print("S" + sentiment)
