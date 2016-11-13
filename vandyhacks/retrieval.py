@@ -23,9 +23,10 @@ class Retrieval(object):
 	api_key = '7f8c3783c4e3426995efbd57fd026831'
 
 	def __init__(self):
-		self.api = "making_retrieval_object"
+		self.api_key = '7f8c3783c4e3426995efbd57fd026831'
 
-	def get_industries():
+
+	def get_industries(self):
 	    industries = {}
 	    r = urllib.urlopen('https://biz.yahoo.com/p/sum_conameu.html').read()
 	    soup = bsoup(r, "html.parser")
@@ -34,7 +35,7 @@ class Retrieval(object):
 	    return industries
 
 
-	def get_index(ext):
+	def get_index(self,ext):
 	    r = urllib.urlopen('https://biz.yahoo.com/p/'+ext).read()
 	    soup = bsoup(r, "html.parser")
 	    soup = soup.find_all('tr')[10:]  # 0 through 9 are headers
@@ -57,13 +58,13 @@ class Retrieval(object):
 
 
 
-	def hist_stock(symbol, start_date, end_date):
+	def hist_stock(self,symbol, start_date, end_date):
 	    #  returns array of tuples (date, year, month, day, d, open, close, high, low, volume, adjusted_close)
 	    stock = [(x[0], x[6]) for x in fin.quotes_historical_yahoo_ochl(symbol, start_date, end_date, asobject=True)]
 	    return stock
 
 
-	def plot_stock(hist_data):
+	def plot_stock(self,hist_data):
 	    plt.plot([x[0] for x in hist_data], [x[1] for x in hist_data])
 	    plt.ylabel("Closing Price ($)")
 	    plt.title("Closing Prices")
@@ -71,11 +72,11 @@ class Retrieval(object):
 	    plt.show()
 
 
-	def get_news(y, m, d, q):
+	def get_news(self, y, m, d, q):
 	    #NYT API
 	    url = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?'
 	    params = {
-	        'api-key': api_key,
+	        'api-key': self.api_key,
 	        'facet_field': 'day_of_week',
 	        'facet_fiter': 'true',
 	        'type_of_material': 'News',
@@ -96,6 +97,7 @@ class Retrieval(object):
 	    	print('No data points found')
 	        return None
 
+	    print "\nThere should be a value of test here\n"
 
 	    response = test.json()['response']['docs']
 	    headlines = []
@@ -105,7 +107,7 @@ class Retrieval(object):
 	    return headlines
 
 
-	def sentiment_analysis(headlines):
+	def sentiment_analysis(self,headlines):
 	    #removes stop words from headline
 	    stop_words = list(stopwords.words('english'))
 	    headlines_without_stop_words = []
@@ -134,18 +136,22 @@ class Retrieval(object):
 	        return 0
 
 
-	def hist_to_date(start_date, end_date, query):
+	def hist_to_date(self, start_date, end_date, query):
 	    days = []
 	    sentiments = []
+
 	    d = start_date
 	    delta = dt.timedelta(days=1)
+
 	    while d <= end_date:
-	        headlines = get_news(d.year, d.month, d.day, query)
+	        headlines = self.get_news( d.year, d.month, d.day, query)
 	        if (headlines != None):
-	            sentiment = sentiment_analysis(headlines)
+	            sentiment = self.sentiment_analysis(headlines)
 	            days += [d]
 	            sentiments += [sentiment]
 	        d += delta
-	        time.sleep(0.375)
+	        time.sleep(0.5)
 	    return zip(days, sentiments)
+
+
    
