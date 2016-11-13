@@ -2,16 +2,62 @@
 <html lang="en">
 <head>
     <title>{% block title %}Stock News Analysis{% endblock %}</title>
-    
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script type="text/javascript" src="script.js"></script>
 </head>
 
 <body>
-	<div id="page">
-
-    <div id="content">
-	
-	
+	<div id="page" height="30%" width="100%" class="pageclass">
+        <div class="title">
+            <a>MINT 2385</a>
+        </div>
+        <div class="topnav">
+            <ul>
+                <li class="first"><div class="dropdown"><a class="dropmenu" href="#">SECTOR</a>
+                    <div class="dropdown-content">
+                        <a onclick="setSector(this)" href="">Link 1</a>
+                        <a onclick="setSector(this)" href="">Link 2</a>
+                        <a onclick="setSector(this)" href="">Link 3</a>
+                        <a onclick="setSector(this)" href="">Link 4</a>
+                    </div></div>
+                </li>
+                <li><div class="dropdown"><a class="dropmenu" href="#">CURRENCY</a>
+                    <div class="dropdown-content">
+                        <a onclick="setCurrency(this)" href="">Link 1</a>
+                        <a onclick="setCurrency(this)" href="">Link 2</a>
+                        <a onclick="setCurrency(this)" href="">Link 3</a>
+                        <a onclick="setCurrency(this)" href="">Link 4</a>
+                    </div></div>
+                </li>
+                <li><div class="dropdown"><a class="dropmenu" href="#">PREDICT</a>
+                    <div class="dropdown-content">
+                        <a onclick="setPredict(this)" href="#">Link 1</a>
+                        <a onclick="setPredict(this)" href="#">Link 2</a>
+                        <a onclick="setPredict(this)" href="#">Link 3</a>
+                        <a onclick="setPredict(this)" href="#">Link 4</a>
+                    </div></div>
+                </li>
+                <li><div class="dropdown"><a class="dropmenu" href="#">ABOUT</a>
+                    <div class="dropdown-content">
+                        <a href="#">Link 1</a>
+                        <a href="#">Link 2</a>
+                        <a href="#">Link 3</a>
+                        <a href="#">Link 4</a>
+                    </div></div>
+                </li>
+                <li class="last">
+                    <div class="search-link">
+                        <ul>
+                            <li><input type="text" class="hidden"/></li>
+                            <li><a href="#" class="search">SEARCH</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
 	</div>
-		
+    <canvas class="display">
+        Sorry, but your browser does not support Canvas. Please try with Google Chrome.
+    </canvas>
 </body>
 </html>
