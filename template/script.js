@@ -14,13 +14,20 @@ function plot_stock(data) {
     var max = 0;
     for(var i=0;i<time_series.length;i++){//Find maximum
         values.push(parseInt(time_series[i][1]));
-        max = Math.max(parseInt(time_series[i][1]),max)*3/2;
+        max = Math.max(parseInt(time_series[i][1]),max);
     }
+    max *= 3/2;
     ctx.fillStyle="#00135A";
     ctx.font="20px Arial";
-    ctx.fillText(max/4,15,3*height/4+10);
-    ctx.fillText(max/2,15,height/2+10);
-    ctx.fillText(3*max/4,15,height/4+10);
+
+    ctx.fillText(Math.round(max/4),15,3*height/4+10);
+    ctx.fillText(Math.round(max/2),15,height/2+10);
+    ctx.fillText(Math.round(3*max/4),15,height/4+10);
+
+    ctx.fillText(time_series[Math.floor(time_series.length/4)][0],Math.floor(time_series.length/4)*delta_x-45,height-10);
+    ctx.fillText(time_series[Math.floor(time_series.length/2)][0],Math.floor(time_series.length/2)*delta_x-45,height-10);
+    ctx.fillText(time_series[Math.floor(time_series.length*3/4)][0],Math.floor(time_series.length*3/4)*delta_x-45,height-10);
+
     ctx.lineWidth="1px"
     ctx.strokeStyle="#A5A5FE";
     for(var i=0;i<time_series.length;i++){
@@ -64,8 +71,7 @@ function plot_sentiment(data){
     ctx.strokeStyle="#00FF00";
     ctx.moveTo(0, height-height/max*values[0]);
     for(var i=0;i<values.length;i++){
-        if(values[i]==0){ctx.stroke();ctx.beginPath();}
-        else{ctx.lineTo(delta_x*i,height-height/4*values[i]);}
+        ctx.lineTo(delta_x*i,height-height/4*values[i]);
     }
     ctx.stroke();
 }
