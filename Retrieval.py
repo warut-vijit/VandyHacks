@@ -7,17 +7,17 @@ from bs4 import BeautifulSoup
 from nltk import word_tokenize, tokenize
 from nltk.corpus import stopwords
 
-
 from nltk.sentiment import SentimentAnalyzer
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk.corpus import names
 from nltk.sentiment.util import *
 
+import time
 import datetime as dt 
 
 
 
-api_key = 'ea79de4994b64abdaf8520b0a878495a'
+api_key = '7f8c3783c4e3426995efbd57fd026831'
 
 
 def hist_stock(symbol, start_date, end_date):
@@ -45,15 +45,18 @@ def get_news(y, m, d, q):
         'facet_fiter': 'true',
         'type_of_material': 'News',
         'q' : str(q),
-        'begin_date': str(y)+str(m)+str(d),
-        'end_date': str(y)+str(m)+str(d)
+        'begin_date': str(y)+("0"+str(m))[-2:]+("0"+str(d))[-2:],
+        'end_date': str(y)+("0"+str(m))[-2:]+("0"+str(d))[-2:]
     }
     for param in params:
         url += param+'='+params[param]+'&'
 
     test = requests.get(url[:-1])
-    # print(test.json())
-    if('status' not in test.json() or test.json()['status'] == "ERROR" ):
+    print(test.json())
+    if ('status' not in test.json()):
+    #     print('API Exceeded')
+        return None
+    if(test.json()['status'] == "ERROR" ):
         return None
     else:
         print('passed')
@@ -84,15 +87,18 @@ def sentiment_analysis(headlines):
     for i in range(len(headlines_without_stop_words)):
         sentences = tokenize.sent_tokenize(headlines_without_stop_words[i])
         for sentence in sentences:
-            # print(sentence)
             ss = sid.polarity_scores(sentence)
             total_compoud_value_for_day += ss['compound']
             # for k in sorted(ss):
             #     print '{0}: {1}, '.format(k, ss[k]),
             # print("\n")
-    return total_compoud_value_for_day/len(headlines_without_stop_words)
-
-    # return tokens
+    
+    if (len(headlines_without_stop_words) != 0):
+        return total_compoud_value_for_day/len(headlines_without_stop_words)
+    else:
+        return 0
+    # print(total_compoud_value_for_day)
+    # return total_compoud_value_for_day/len(headlines_without_stop_words)
 
 
 def hist_to_date(start_date, end_date, query):
@@ -102,24 +108,25 @@ def hist_to_date(start_date, end_date, query):
     d = start_date
     delta = dt.timedelta(days=1)
     while d <= end_date:
+        print("new day")
         headlines = get_news(d.year, d.month, d.day, query)
         if (headlines != None):
             sentiment = sentiment_analysis(headlines)
+            # print("S" + sentiment)
             days += [d]
             sentiments += [sentiment]
         d += delta
+        time.sleep(0.375)
     print(days)
     print(sentiments)
     return zip(days, sentiments)
    
 
 
-    return "hi"
-
 
 headlines = get_news('2016', '11', '11', 'Apple Inc')
 sentiment_analysis(headlines)
-information = hist_to_date(datetime(2016, 1, 1), datetime(2016, 1, 5), 'trump')
+information = hist_to_date(datetime(2016, 1, 1), datetime(2016, 1, 20), 'Apple Inc')
 plot_stock(information)
 
 # print(headlines)
