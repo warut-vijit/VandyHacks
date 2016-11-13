@@ -28,7 +28,7 @@ class Retrieval(object):
     def __init__(self):
         self.api = 'making_retrieval_object'
 
-    def get_industries():
+    def get_industries(self):
         industries = {}
         r = urllib.urlopen('https://biz.yahoo.com/p/sum_conameu.html'
                            ).read()

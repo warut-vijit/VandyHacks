@@ -15,8 +15,8 @@ def graph_view(request, stock_id):
 # 	date = startdate.split()
 # 	return date
 def index(request):
-    context = {'sectorList': retrieval.getIndustries()}
-    return render(request, 'index/html', context)
+    context = {'sectorList': retrieval.get_industries()}
+    return render(request, 'base.html', context)
 
 def search(self, s):
 	return HttpResponse(s)
