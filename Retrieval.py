@@ -145,7 +145,7 @@ def hist_to_date(start_date, end_date, query):
         if (headlines != None):
             sentiment = sentiment_analysis(headlines)
             # print("S" + sentiment)
-            days += [d]
+            days += [str(d.date())]  # Modified for easier graphing
             sentiments += [sentiment]
         d += delta
         time.sleep(0.375)
