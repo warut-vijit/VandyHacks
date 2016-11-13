@@ -23,10 +23,10 @@ import datetime as dt
 
 class Retrieval(object):
 
-	api_key = '7f8c3783c4e3426995efbd57fd026831'
+	api_key = '90e3bf65421e4010953056f975a5a884'
 
 	def __init__(self):
-		self.api_key = '7f8c3783c4e3426995efbd57fd026831'
+		self.api_key = '90e3bf65421e4010953056f975a5a884'
 
 
 	def get_industries(self):
@@ -62,9 +62,12 @@ class Retrieval(object):
 
 
 	def hist_stock(self,symbol, start_date, end_date):
-	    #  returns array of tuples (date, year, month, day, d, open, close, high, low, volume, adjusted_close)
-	    stock = [(x[0], x[6]) for x in fin.quotes_historical_yahoo_ochl(symbol, start_date, end_date, asobject=True)]
-	    return stock
+		print(type(symbol))
+		print(type(start_date))
+		print(type(end_date))
+		stock = [(x[0], x[6]) for x in fin.quotes_historical_yahoo_ochl(symbol, start_date, end_date, asobject=True)]
+
+		return stock
 
 
 	def plot_stock(self,hist_data):
@@ -91,7 +94,7 @@ class Retrieval(object):
 	        url += param+'='+params[param]+'&'
 
 	    test = requests.get(url[:-1])
-
+	    print(test.json())
 	    #Error messages of data is not found
 	    if ('status' not in test.json()):
 	        print('API Exceeded')
@@ -153,6 +156,6 @@ class Retrieval(object):
 	            days += [d]
 	            sentiments += [sentiment]
 	        d += delta
-	        time.sleep(0.5)
+	        time.sleep(1)
 	    return zip(days, sentiments)
 

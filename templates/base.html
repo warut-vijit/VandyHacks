@@ -2,21 +2,24 @@
 <html lang="en">
 <head>
     <title>{% block title %}Stock News Analysis{% endblock %}</title>
-    <link rel="stylesheet" href="style.css" type="text/css">
-    <script type="text/javascript" src="script.js"></script>
+    {% load static %}
+    <link type = "text/css" rel="stylesheet" href="/static/style.css">
+    <!-- <link type = "text/javascript" src="/static/script.js"> -->
+    <!-- <link rel="stylesheet" href='{% static "style.css" %}' type="text/css"> -->
+    <!-- <script type="text/javascript" src='{% static "script.js" %}'></script> -->
 </head>
 
 <body>
 	<div id="page" height="30%" width="100%" class="pageclass">
         <div class="title">
-            <a>MINT 2385</a>
+            <a>Bear-A-Bull Stocks</a>
         </div>
         <div class="topnav">
             <ul>
                 <li class="first"><div class="dropdown"><a class="dropmenu" href="#">SECTOR</a>
                     <div class="dropdown-content">
 						{% for sector in sectorList %}
-                        <a onclick="" href="">{{sector}}</a>
+                        <a onclick="setSector({{ sector.key1}})" href="">{{sector.key1}}</a>
 						{% endfor %}
                 </li>
                 <li><div class="dropdown"><a class="dropmenu" href="#">CURRENCY</a>
@@ -55,9 +58,12 @@
             </ul>
         </div>
 	</div>
-    <canvas class="display">
+    <canvas class="display" id="canvas" height="500px" width="1000px" onmousemove="getLocation(event)">
         Sorry, but your browser does not support Canvas. Please try with Google Chrome.
     </canvas>
-	
+    <script>
+        canvas_init();
+    </script>
+    <script src="/static/script.js"></script>
 </body>
 </html>
