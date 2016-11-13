@@ -22,7 +22,7 @@ from . import views
 
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
-    url(r'^index/$', views.index, name='index'),
+    url(r'^index/$', views.default, name='index'),
     url(r'^search/(?P<s>.*)/$', views.search, name='search'),
     # url(r'^search/(?P<s>.*)/$', views.search, name='search'),
 ]

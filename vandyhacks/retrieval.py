@@ -34,8 +34,7 @@ class Retrieval(object):
                            ).read()
         soup = bsoup(r, 'html.parser')
         for td in soup.find_all('td', bgcolor='ffffee'):
-            industries[td.find('a').find('font').text] = td.find('a'
-                    )['href']
+            industries.push({'name': td.find('a').find('font').text, 'url': td.find('a')['href']})
         return industries
 
     def get_index(ext):
